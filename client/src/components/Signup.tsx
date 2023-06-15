@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import Cookies from 'js-cookie'
+import dds from 'deventds/dist/handle'
 
 
 function Signup() {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Cookies from 'js-cookie'
 
 
 async function getFeed(feed_idx, fetch_params) {
