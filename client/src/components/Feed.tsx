@@ -65,7 +65,7 @@ async function insertFeed(content) {
 // }
 
 function Feed() {
-    const [feeds, setFeeds] = useState([{idx: 0, content:'', owner: ''}])
+    const [feeds, setFeeds] = useState([{idx: 0, content:'', owner: '', date: ''}])
 
     useEffect(() => {
         const loadData = async () => {

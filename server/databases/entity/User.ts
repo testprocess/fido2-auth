@@ -17,4 +17,9 @@ export class User {
     @Column()
     userAuthLevel: number;
 
+    @Column({ type: "varchar", length: 20 })
+    provider: number;
+
+    @Column({ type: 'timestamp' })
+    createAt: Date;
 }

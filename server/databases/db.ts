@@ -6,6 +6,7 @@ import data from '../config/database.js';
 
 import { User } from './entity/User.js'
 import { Feed } from './entity/Feed.js'
+import { Credentials } from './entity/Credentials.js'
 
 const MySQLConnect = createConnection({
   host     : data[ process.env.NODE_ENV ].host,
@@ -25,7 +26,7 @@ const AppDataSource = new DataSource({
   database: data[ process.env.NODE_ENV ].database,
   synchronize: true,
   logging: true,
-  entities: [ User, Feed ],
+  entities: [ User, Feed, Credentials ],
   subscribers: [],
   migrations: [],
 })

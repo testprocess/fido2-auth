@@ -4,14 +4,16 @@ import { User } from "../databases/entity/User.js";
 
 
 const userModel = {
-    create: async function ({ userId, userPasswordHash, userEmail }) {
+    create: async function ({ userId, userPasswordHash, userEmail, provider }) {
         try {
             const userValues = new User()
             userValues.userId = userId
             userValues.userPassword = userPasswordHash
             userValues.userEmail = userEmail
             userValues.userAuthLevel = 1
-    
+            userValues.createAt = new Date()
+            userValues.provider = provider
+
             const userRepository = AppDataSource.getRepository(User);
             await userRepository.save(userValues)
             return { status: 1 }

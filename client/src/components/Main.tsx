@@ -32,8 +32,8 @@ function Main() {
                 <div className="row gx-5 justify-content-center">
                     <div className="col-lg-7">
                         <div className="text-center mt-5">
-                            <h1 className="display-5 fw-bolder text-dark font-weight-lg mb-2">더 모던하고 깔끔한 게시판의 세계로</h1>
-                            <p className="font-weight-sm mb-4 mt-3">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit!</p>
+                            <h1 className="display-5 fw-bolder text-dark font-weight-lg mb-2">FIDO2</h1>
+                            <p className="font-weight-sm mb-4 mt-3">비밀번호 없는 로그인을 구현할 수 있어요</p>
                         </div>
                         <ButtonBox isLogin={isLogin}></ButtonBox>
 
