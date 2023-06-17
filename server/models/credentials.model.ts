@@ -4,11 +4,14 @@ import { Credentials } from "../databases/entity/Credentials.js";
 
 
 const credentialsModel = {
-    create: async function ({ userId, publicKey }) {
+    create: async function ({ userId, publicKey, credentialId }) {
         try {
             const credentialValues = new Credentials()
             credentialValues.userId = userId
             credentialValues.publicKey = publicKey
+            credentialValues.credentialId = credentialId
+
+            
     
             const userRepository = AppDataSource.getRepository(Credentials);
             await userRepository.save(credentialValues)

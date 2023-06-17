@@ -11,4 +11,8 @@ export class Credentials {
     @Column({ type: "varchar", length: 500 })
     publicKey: string;
 
+    @Column({ type: "varchar", length: 500 })
+    credentialId: string;
+    
+
 }

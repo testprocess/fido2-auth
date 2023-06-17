@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Cookies from 'js-cookie'
+import { base64url } from "../utils/base64url";
+
 
 
 function Main() {
@@ -20,6 +22,91 @@ function Main() {
         }
     }
 
+    const sp = () => {
+        const userId = 'dddsw'
+
+        return fetch('/api/auth/publickey/challenge', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                name: userId,
+                username: userId,
+            }),
+          })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(json) {
+            return navigator.credentials.create({
+              publicKey: {
+                rp: {
+                  name: 'fido2'
+                },
+                user: {
+                  id: new TextEncoder().encode(userId),
+                  name: userId,
+                  displayName: userId
+                },
+                challenge: new TextEncoder().encode(json.challenge),
+                pubKeyCredParams: [
+                  {
+                    type: 'public-key',
+                    alg: -7
+                  }
+                ],
+                authenticatorSelection: {
+                  userVerification: 'discouraged',
+                  //authenticatorAttachment: "platform",
+                  residentKey: 'required'
+                }
+              }
+            });
+          })
+          .then(function(credential: any) {
+            const rawId = base64url.encode(credential.rawId);
+            const clientDataJSON = base64url.encode(credential.response.clientDataJSON);
+            const attestationObject = base64url.encode(credential.response.attestationObject);
+            
+            let body = {
+                response: {
+                    rawId: rawId,
+                    clientDataJSON: clientDataJSON,
+                    attestationObject: attestationObject,
+                    transports: undefined
+                }
+            };
+
+            console.log(body)
+            
+
+            if (credential.response.getTransports) {
+              body.response.transports = credential.response.getTransports();
+            }
+            
+            return fetch('/api/auth/publickey', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'x-access-token': Cookies.get("user")
+              },
+              body: JSON.stringify(body)
+            });
+          })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(json) {
+            console.log(json)
+            //window.location.href = json.location;
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+    }
+
     useEffect(() => {
         let loginStatus = checkLogin()
         setLoginStatus(loginStatus.isVaild)
@@ -35,6 +122,7 @@ function Main() {
                             <h1 className="display-5 fw-bolder text-dark font-weight-lg mb-2">FIDO2</h1>
                             <p className="font-weight-sm mb-4 mt-3">비밀번호 없는 로그인을 구현할 수 있어요</p>
                         </div>
+                        <button onClick={sp}>df</button>
                         <ButtonBox isLogin={isLogin}></ButtonBox>
 
                     </div>
