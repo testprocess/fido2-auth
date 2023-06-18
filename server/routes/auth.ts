@@ -10,6 +10,7 @@ router.get('/me', tokenMiddleware.check, authController.me);
 
 router.post('/publickey/challenge', fidoAuthController.publicKeyChallenge);
 router.post('/publickey', tokenMiddleware.check, fidoAuthController.publicKey, fidoAuthController.ok, fidoAuthController.error);
+router.get('/publickey/credential', tokenMiddleware.check, fidoAuthController.getCredential);
 
 
 

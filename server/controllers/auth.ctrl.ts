@@ -154,6 +154,20 @@ const fidoAuthController = {
         }
     },
 
+    getCredential: async function (req, res, next) {
+        const getCredential = await credentialsModel.read({
+            userId: req.auth.userId
+        })
+
+        if (getCredential.status == 0) {
+            return res.status(401).json({status:0})
+        }
+        
+        res.json({ status: 1, credential: getCredential.credential });
+    },
+
+    
+
     ok: async function (req, res, next) {
         res.json({ status: 1 });
     },

@@ -6,6 +6,7 @@ import { base64url } from "../utils/base64url";
 
 function Main() {
     const [isLogin, setLoginStatus] = useState(0);
+    const [userId, setUserId] = useState('');
 
     const checkLogin = () => {
         let token = Cookies.get("user")
@@ -22,9 +23,7 @@ function Main() {
         }
     }
 
-    const sp = () => {
-        const userId = 'dddsw'
-
+    const registration = () => {
         return fetch('/api/auth/publickey/challenge', {
             method: 'POST',
             headers: {
@@ -107,9 +106,48 @@ function Main() {
           });
     }
 
+    const authentication = async () => {
+
+        const getChallenge = await fetch('/api/auth/publickey/challenge', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+            },
+        })
+        const challengeResponse = await getChallenge.json()
+        const getCredentialId = await fetch('/api/auth/publickey/credential', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'x-access-token': Cookies.get("user")
+            },
+        })
+        const credentialIdResponse  = await getCredentialId.json()
+
+        console.log(credentialIdResponse.credential.credentialId)
+
+        const credentials = await navigator.credentials.get({
+            publicKey: {
+                userVerification: "discouraged",
+                challenge: new TextEncoder().encode(challengeResponse.challenge),
+                allowCredentials: [{
+                    id: base64url.decode(credentialIdResponse.credential.credentialId),
+                    type: 'public-key',
+                    transports: ["internal"],
+    
+                }],
+                timeout: 60000
+            }
+        });
+
+        console.log(credentials)
+
+    }
+
     useEffect(() => {
         let loginStatus = checkLogin()
         setLoginStatus(loginStatus.isVaild)
+        setUserId(loginStatus.decoded.user_id)
     }, []);
 
 
@@ -122,7 +160,9 @@ function Main() {
                             <h1 className="display-5 fw-bolder text-dark font-weight-lg mb-2">FIDO2</h1>
                             <p className="font-weight-sm mb-4 mt-3">비밀번호 없는 로그인을 구현할 수 있어요</p>
                         </div>
-                        <button onClick={sp}>df</button>
+                        <button onClick={registration}>Registration</button>
+                        <button onClick={authentication}>Authentication</button>
+
                         <ButtonBox isLogin={isLogin}></ButtonBox>
 
                     </div>
